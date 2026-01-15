@@ -1,15 +1,14 @@
-import AppEmployeesListItem, {
-	type AppEmployeesListItemProps,
-} from '../app-employees-list-item/app-employees-list-item'
+import type { Employee } from '../../types/employee'
+import AppEmployeesListItem from '../app-employees-list-item/app-employees-list-item'
 import './app-employees-list.css'
 
 interface AppEmployeesListProps {
-	data: AppEmployeesListItemProps[]
+	data: Employee[]
 }
 
 const AppEmployeesList = ({ data }: AppEmployeesListProps) => {
-	const elements = data.map(item => {
-		return <AppEmployeesListItem {...item} />
+	const elements = data.map(({ id, ...otherProps }) => {
+		return <AppEmployeesListItem key={id} {...otherProps} />
 	})
 	return <ul className='app-list list-group'>{elements}</ul>
 }
