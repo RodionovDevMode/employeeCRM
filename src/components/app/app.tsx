@@ -1,43 +1,47 @@
+import { useState } from 'react'
 import AppInfo from '../app-info/app-info'
 import AppSearchPanel from '../app-search/app-search'
 import AppFilter from '../app-filter/app-filter'
 import './app.css'
 import AppEmployeesList from '../app-employees-list/app-employees-list'
 import AppEmployeesAddForm from '../app-employees-add-form/app-employees-add-form'
-import type { Employee } from '../../types/employee'
 
 const App = () => {
-	const data: Employee[] = [
-		{
-			name: 'John Small',
-			salary: 800,
-			increase: false,
-			id: 1,
-		},
-		{
-			name: 'Big Ben',
-			salary: 1200,
-			increase: false,
-			id: 2,
-		},
-		{
-			name: 'Clark Kent',
-			salary: 2500,
-			increase: true,
-			id: 3,
-		},
-	]
-	return (
-		<div className='app'>
-			<AppInfo nameCo='DevMode' employeesNum={3} employeesBonus={1} />
-			<div className='app-search'>
-				<AppSearchPanel />
-				<AppFilter />
-			</div>
-			<AppEmployeesList data={data} />
-			<AppEmployeesAddForm />
-		</div>
-	)
+  const [data, setData] = useState([
+    { id: 1, name: 'John Small', salary: 800, increase: false, rise: false },
+    { id: 2, name: 'Big Ben', salary: 1200, increase: false, rise: false },
+    { id: 3, name: 'Clark Kent', salary: 2500, increase: true, rise: false },
+  ])
+
+  const onToggleIncrease = (id: number) => {
+    setData(prev =>
+      prev.map(item =>
+        item.id === id ? { ...item, increase: !item.increase } : item
+      )
+    )
+  }
+
+  const onToggleRise = (id: number) => {
+    setData(prev =>
+      prev.map(item => (item.id === id ? { ...item, rise: !item.rise } : item))
+    )
+  }
+
+  return (
+    <div className='app'>
+      <AppInfo nameCo='DevMode' employeesNum={data.length} employeesBonus={data.filter(e => e.increase).length} />
+      <div className='app-search'>
+        <AppSearchPanel />
+        <AppFilter />
+      </div>
+      <AppEmployeesList
+        data={data}
+        onToggleIncrease={onToggleIncrease}
+        onToggleRise={onToggleRise}
+      />
+      <AppEmployeesAddForm />
+    </div>
+  )
 }
 
 export default App
