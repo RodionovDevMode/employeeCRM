@@ -8,10 +8,19 @@ export interface AppEmployeesListItemProps {
 	rise: boolean
 	onToggleIncrease: () => void
 	onToggleRise: () => void
+	onDelete: () => void
 }
 
 const AppEmployeesListItem = (props: AppEmployeesListItemProps) => {
-	const { name, salary, increase, rise, onToggleIncrease, onToggleRise } = props
+	const {
+		name,
+		salary,
+		increase,
+		rise,
+		onToggleIncrease,
+		onToggleRise,
+		onDelete,
+	} = props
 
 	const classNames = [
 		'list-group-item',
@@ -42,7 +51,7 @@ const AppEmployeesListItem = (props: AppEmployeesListItemProps) => {
 					<i className='fas fa-cookie'></i>
 				</button>
 
-				<button type='button' className='btn-trash btn-sm '>
+				<button type='button' className='btn-trash btn-sm ' onClick={onDelete}>
 					<i className='fas fa-trash'></i>
 				</button>
 				<i className='fas fa-star'></i>

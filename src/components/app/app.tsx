@@ -38,6 +38,10 @@ const App = () => {
 		)
 	}
 
+	const onDelete = (id: number) => {
+		setData(prev => prev.filter(item => item.id !== id))
+	}
+
 	return (
 		<div className='app'>
 			<AppInfo
@@ -53,6 +57,7 @@ const App = () => {
 				data={data}
 				onToggleIncrease={onToggleIncrease}
 				onToggleRise={onToggleRise}
+				onDelete={onDelete}
 			/>
 			<AppEmployeesAddForm onAddEmployee={onAddEmployee} />
 		</div>
