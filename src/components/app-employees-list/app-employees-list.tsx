@@ -20,15 +20,19 @@ const AppEmployeesList = ({
 	onToggleRise,
 	onDelete,
 }: AppEmployeesListProps) => {
-	const elements = data.map(item => (
-		<AppEmployeesListItem
-			key={item.id}
-			{...item}
-			onToggleIncrease={() => onToggleIncrease(item.id)}
-			onToggleRise={() => onToggleRise(item.id)}
-			onDelete={() => onDelete(item.id)}
-		/>
-	))
+	const elements = data.map(item => {
+		const { id, ...rest } = item
+		return (
+			<AppEmployeesListItem
+				id={id}
+				key={id}
+				{...rest}
+				onToggleIncrease={() => onToggleIncrease(id)}
+				onToggleRise={() => onToggleRise(id)}
+				onDelete={() => onDelete(id)}
+			/>
+		)
+	})
 
 	return <ul className='app-list list-group'>{elements}</ul>
 }
