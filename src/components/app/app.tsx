@@ -1,10 +1,13 @@
 import { useState } from 'react'
+import type { Employee } from '../../types/employee'
+
 import AppInfo from '../app-info/app-info'
-import AppSearchPanel from '../app-search/app-search'
+
 import AppFilter from '../app-filter/app-filter'
-import './app.css'
 import AppEmployeesList from '../app-employees-list/app-employees-list'
 import AppEmployeesAddForm from '../app-employees-add-form/app-employees-add-form'
+import './app.css'
+import AppSearchPanel from '../app-search-panel/app-search-panel'
 
 const App = () => {
 	const [data, setData] = useState([
@@ -12,6 +15,8 @@ const App = () => {
 		{ id: 2, name: 'Big Ben', salary: 1200, increase: false, rise: false },
 		{ id: 3, name: 'Clark Kent', salary: 2500, increase: true, rise: false },
 	])
+	const [searchTerm, setSearchTerm] = useState('')
+	const [filter, setFilter] = useState<'all' | 'rise' | 'increase'>('all')
 
 	const onAddEmployee = (name: string, salary: number) => {
 		const newEmployee = {
@@ -42,6 +47,34 @@ const App = () => {
 		setData(prev => prev.filter(item => item.id !== id))
 	}
 
+	const onUpdateSearch = (term: string) => {
+		setSearchTerm(term)
+	}
+
+	const onUpdateFilter = (filter: 'all' | 'rise' | 'increase') => {
+		setFilter(filter)
+	}
+
+	const searchEmployees = (items: Employee[], term: string) => {
+		if (!term) return items
+		return items.filter(item =>
+			item.name.toLowerCase().includes(term.toLowerCase())
+		)
+	}
+
+	const filterEmployees = (items: Employee[], filter: string) => {
+		switch (filter) {
+			case 'rise':
+				return items.filter(item => item.rise)
+			case 'increase':
+				return items.filter(item => item.increase)
+			default:
+				return items
+		}
+	}
+
+	const visibleData = filterEmployees(searchEmployees(data, searchTerm), filter)
+
 	return (
 		<div className='app'>
 			<AppInfo
@@ -50,11 +83,12 @@ const App = () => {
 				employeesBonus={data.filter(e => e.increase).length}
 			/>
 			<div className='app-search'>
-				<AppSearchPanel />
-				<AppFilter />
+				<AppSearchPanel onUpdateSearch={onUpdateSearch} />
+
+				<AppFilter onUpdateFilter={onUpdateFilter} currentFilter={filter} />
 			</div>
 			<AppEmployeesList
-				data={data}
+				data={visibleData}
 				onToggleIncrease={onToggleIncrease}
 				onToggleRise={onToggleRise}
 				onDelete={onDelete}

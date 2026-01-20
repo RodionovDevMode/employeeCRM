@@ -3,4 +3,5 @@ export interface Employee {
 	name: string
 	salary: number
 	increase: boolean
+	rise: boolean
 }

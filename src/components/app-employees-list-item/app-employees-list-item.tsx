@@ -1,11 +1,7 @@
+import type { Employee } from '../../types/employee'
 import './app-employees-list-item.css'
 
-export interface AppEmployeesListItemProps {
-	id: number
-	name: string
-	salary: number
-	increase: boolean
-	rise: boolean
+export interface AppEmployeesListItemProps extends Employee {
 	onToggleIncrease: () => void
 	onToggleRise: () => void
 	onDelete: () => void
