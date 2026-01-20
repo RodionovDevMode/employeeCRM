@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { Employee } from '../../types/employee'
 
 import AppInfo from '../app-info/app-info'
@@ -10,13 +10,40 @@ import './app.css'
 import AppSearchPanel from '../app-search-panel/app-search-panel'
 
 const App = () => {
-	const [data, setData] = useState([
-		{ id: 1, name: 'John Small', salary: 800, increase: false, rise: false },
-		{ id: 2, name: 'Big Ben', salary: 1200, increase: false, rise: false },
-		{ id: 3, name: 'Clark Kent', salary: 2500, increase: true, rise: false },
-	])
+	const [data, setData] = useState<Employee[]>(() => {
+		const saved = localStorage.getItem('employees')
+		return saved
+			? JSON.parse(saved)
+			: [
+					{
+						id: 1,
+						name: 'John Small',
+						salary: 800,
+						increase: false,
+						rise: false,
+					},
+					{
+						id: 2,
+						name: 'Big Ben',
+						salary: 1200,
+						increase: false,
+						rise: false,
+					},
+					{
+						id: 3,
+						name: 'Clark Kent',
+						salary: 2500,
+						increase: true,
+						rise: false,
+					},
+			  ]
+	})
 	const [searchTerm, setSearchTerm] = useState('')
 	const [filter, setFilter] = useState<'all' | 'rise' | 'increase'>('all')
+
+	useEffect(() => {
+		localStorage.setItem('employees', JSON.stringify(data))
+	}, [data])
 
 	const onAddEmployee = (name: string, salary: number) => {
 		const newEmployee = {
