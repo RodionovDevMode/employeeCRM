@@ -46,6 +46,8 @@ const App = () => {
 	}, [data])
 
 	const onAddEmployee = (name: string, salary: number) => {
+		if (!name.trim()) return
+		if (salary <= 0) return
 		const newEmployee = {
 			id: Date.now(),
 			name,

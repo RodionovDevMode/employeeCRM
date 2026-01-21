@@ -26,6 +26,8 @@ const AppEmployeesAddForm = ({ onAddEmployee }: AppEmployeesAddFormProps) => {
 		console.log(formData)
 	}
 
+	const isValid = formData.name.trim().length > 0 && Number(formData.salary) > 0
+
 	return (
 		<div className='app-add-form'>
 			<h3>Добавьте нового сотрудника</h3>
@@ -47,7 +49,11 @@ const AppEmployeesAddForm = ({ onAddEmployee }: AppEmployeesAddFormProps) => {
 					onChange={onInputChange}
 				/>
 
-				<button type='submit' className='btn btn-outline-light'>
+				<button
+					type='submit'
+					className='btn btn-outline-light'
+					disabled={!isValid}
+				>
 					Добавить
 				</button>
 			</form>
