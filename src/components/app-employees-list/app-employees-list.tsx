@@ -4,9 +4,9 @@ import './app-employees-list.css'
 
 interface AppEmployeesListProps {
 	data: Employee[]
-	onToggleIncrease: (id: number) => void
-	onToggleRise: (id: number) => void
-	onDelete: (id: number) => void
+	onToggleIncrease: (id: string) => void
+	onToggleRise: (id: string) => void
+	onDelete: (id: string) => void
 }
 
 const AppEmployeesList = ({
