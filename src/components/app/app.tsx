@@ -9,52 +9,42 @@ import AppSearchPanel from '../app-search-panel/app-search-panel'
 import './app.css'
 
 const App = () => {
-	const [data, setData] = useState<Employee[]>(() => {
-		const saved = localStorage.getItem('employees')
-		return saved
-			? JSON.parse(saved)
-			: [
-					{
-						id: 1,
-						name: 'John Small',
-						salary: 800,
-						increase: false,
-						rise: false,
-					},
-					{
-						id: 2,
-						name: 'Big Ben',
-						salary: 1200,
-						increase: false,
-						rise: false,
-					},
-					{
-						id: 3,
-						name: 'Clark Kent',
-						salary: 2500,
-						increase: true,
-						rise: false,
-					},
-				]
-	})
+	const [data, setData] = useState<Employee[]>([])
 	const [searchTerm, setSearchTerm] = useState('')
 	const [filter, setFilter] = useState<'all' | 'rise' | 'increase'>('all')
 
 	useEffect(() => {
-		localStorage.setItem('employees', JSON.stringify(data))
-	}, [data])
+		fetch('http://localhost:3000/employees')
+			.then(res => {
+				if (!res.ok) {
+					throw new Error('Failed to fetch 	employees')
+				}
+				return res.json()
+			})
+			.then((employees: Employee[]) => {
+				setData(employees)
+			})
+			.catch(err => {
+				console.error(err)
+			})
+	}, [])
 
-	const onAddEmployee = (name: string, salary: number) => {
-		if (!name.trim()) return
-		if (salary <= 0) return
-		const newEmployee = {
-			id: crypto.randomUUID(),
-			name,
-			salary,
-			increase: false,
-			rise: false,
-		}
-		setData(prev => [...prev, newEmployee])
+	const onAddEmployee = async (name: string, salary: number) => {
+		if (!name.trim() || salary <= 0) return
+		const res = await fetch('http://localhost:3000/employees', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				name,
+				salary,
+				increase: false,
+				rise: false,
+			}),
+		})
+		const createdEmployee = await res.json()
+		setData(prev => [...prev, createdEmployee])
 	}
 
 	const onToggleIncrease = (id: string) => {
